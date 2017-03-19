@@ -1,0 +1,8 @@
+<% if @cart_item.quantity == 1 %>
+  $('#cart-list').append(`<%= render partial: 'shared/cart_product',
+                                     locals: { cart_item: @cart_item } %>`);
+<% else %>
+  $('#quantity-product-<%= @cart_item.id %>').val(<%= @cart_item.quantity %>);
+<% end %>
+
+$("#cart-quantity").val(<%= @cart.quantity %>);

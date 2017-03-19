@@ -235,11 +235,6 @@
     background: #18ba9b;
 }
 
-/*Scrollbar*/
-.header-v5 .mCustomScrollbar {
-    height: 300px;
-}
-
 /*Badge Open*/
 .header-v5 .shop-badge:hover .badge-open {
     display: block;

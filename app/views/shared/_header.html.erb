@@ -19,17 +19,24 @@
       <!-- Shopping Cart -->
       <div class="shop-badge badge-icons pull-right">
         <a href="#"><i class="fa fa-shopping-cart"></i></a>
-        <span class="badge badge-sea rounded-x">3</span>
+        <span class="badge badge-sea rounded-x"
+              id='cart-quantity'>
+              <%= @cart.quantity %>
+        </span>
         <div class="badge-open">
-          <ul class="list-unstyled mCustomScrollbar" data-mcs-theme="minimal-dark">
-            <% 3.times do |i| %>
-              <%= render partial: 'shared/cart_product', locals: { product: i } %>
+          <ul class="list-unstyled mCustomScrollbar"
+              data-mcs-theme="minimal-dark"
+              id="cart-list">
+            <% @cart.cart_items do |cart_item| %>
+              <%= render partial: 'shared/cart_product', locals: { cart_item: cart_item } %>
             <% end %>
           </ul>
           <div class="subtotal">
             <div class="overflow-h margin-bottom-10">
               <span>Subtotal</span>
-              <span class="pull-right subtotal-cost">$1200.00</span>
+              <span class="pull-right subtotal-cost">
+                R$ <%= @cart.calculate_total_value %>
+              </span>
             </div>
             <div class="row">
               <div class="col-xs-6">
