@@ -14,3 +14,22 @@
 
 @import "bootstrap-sprockets";
 @import "bootstrap";
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
+// Unify theme
+
+@import 'unify/app';
+@import 'unify/blocks';
+@import "unify/shop.style";
+@import "unify/header-v5";
+@import "unify/footer-v4";
+@import "unify/animate";
+@import "unify/line-icons";
+@import "unify/jquery.mCustomScrollbar";
+@import "unify/owl.carousel";
+@import "unify/settings";
+@import "unify/default";
+@import "unify/custom";
+
+@import "app_customs";

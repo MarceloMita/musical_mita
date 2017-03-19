@@ -1,0 +1,11 @@
+<div class="container content-md">
+  <div class="illustration-v2 margin-bottom-60">
+    <% 2.times do |i| %>
+      <div class="row">
+        <% 3.times do |j| %>
+          <%= render partial: 'shared/product_card', locals: { product: "#{i}, #{j}" } %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

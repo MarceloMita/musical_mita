@@ -14,4 +14,18 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require turbolinks
-//= require_tree .
+
+// Unify theme
+
+//= require unify/back-to-top
+//= require unify/smoothScroll
+//= require unify/jquery.parallax
+//= require unify/owl.carousel
+//= require unify/jquery.mCustomScrollbar.concat.min
+//= require unify/jquery.themepunch.tools.min
+//= require unify/jquery.themepunch.revolution.min
+//= require unify/custom
+//= require unify/shop.app
+//= require unify/owl-carousel
+//= require unify/revolution-slider
+//= require unify/style-switcher
