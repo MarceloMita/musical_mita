@@ -3,7 +3,11 @@ class ApplicationController < ActionController::Base
   before_action :get_cart
 
   def get_cart
-    # Unsecure, but fast way of use session. Next step would be create a authentication system
-    @cart = Cart.includes(:cart_items).find_or_create_by(session_id: session[:session_id])
+    # Unsecure, but fastest way of use session.
+    # Next step would be create a authentication system
+
+    @cart = Cart.includes(cart_items: [:product]).
+              find_or_create_by(session_id: session[:session_id],
+                                checked_out: false)
   end
 end

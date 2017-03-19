@@ -27,8 +27,10 @@ ActiveRecord::Schema.define(version: 20170319120030) do
 
   create_table "carts", force: :cascade do |t|
     t.string   "session_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.boolean  "checked_out", default: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.index ["session_id", "checked_out"], name: "index_carts_on_session_id_and_checked_out", using: :btree
     t.index ["session_id"], name: "index_carts_on_session_id", using: :btree
   end
 

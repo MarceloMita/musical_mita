@@ -19,13 +19,20 @@
 
 //= require unify/back-to-top
 //= require unify/smoothScroll
+//= require unify/jquery.steps
 //= require unify/jquery.parallax
 //= require unify/owl.carousel
 //= require unify/jquery.mCustomScrollbar.concat.min
+//= require unify/jquery.validate.min
 //= require unify/jquery.themepunch.tools.min
 //= require unify/jquery.themepunch.revolution.min
 //= require unify/custom
 //= require unify/shop.app
+//= require unify/stepWizard
+//= require unify/product-quantity
 //= require unify/owl-carousel
 //= require unify/revolution-slider
 //= require unify/style-switcher
+
+
+//= require initializers
