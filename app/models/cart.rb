@@ -19,4 +19,42 @@ class Cart < ApplicationRecord
   def quantity
     self.cart_items.inject(0) { |sum, cart_item| sum + cart_item.quantity }
   end
+
+  def checkout_cart(data)
+    moip_client = MoipClient.new
+    order = moip_client.create_order(order_json(data[:customer_data]))
+    payment = moip_client.create_payment(order.id, payment_json(data[:payment_data]))
+  end
+
+  protected
+
+  def payment_json(payment_data)
+    {
+      installment_count: payment_data[:intallment_count],
+      funding_instrument: 
+    }
+  end
+
+  def order_json(customer_data)
+    {
+      own_id: generate_order_id,
+      items: items_to_json,
+      customer: customer_data
+    }
+  end
+
+  def generate_order_id
+    "pedido_#{self.created_at.to_i}_#{quantity}_#{calculate_subtotal_value.to_i}"
+  end
+
+  def items_to_json
+    self.cart_items.includes(:product).map do |cart_item|
+      {
+        product: cart_item.product.title,
+        quantity: cart_item.quantity,
+        details: cart_item.product.description,
+        price: cart_item.product.value
+      }
+    end
+  end
 end
