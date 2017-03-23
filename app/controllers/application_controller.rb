@@ -6,8 +6,12 @@ class ApplicationController < ActionController::Base
     # Unsecure, but fastest way of use session.
     # Next step would be create a authentication system
 
-    @cart = Cart.includes(cart_items: [:product]).
-              find_or_create_by(session_id: session[:session_id],
-                                checked_out: false)
+    if current_client
+      @cart = current_client.current_cart
+    else
+      @cart = Cart.includes(cart_items: [:product]).
+                find_or_create_by(session_id: session[:session_id],
+                                  checked_out: false)
+    end
   end
 end

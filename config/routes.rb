@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :clients
   root 'products#marketplace'
 
   get 'carts/show' => 'carts#show'

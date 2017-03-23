@@ -8,21 +8,10 @@ class MoipClient
   end
 
   def create_order(data)
-    order = api.order.create({
-      own_id: "ruby_sdk_1",
-      items: [
-        {
-          product: "Nome do produto",
-          quantity: 1,
-          detail: "Mais info...",
-          price: 1000
-        }
-      ],
-      customer: {
-        own_id: "ruby_sdk_customer_1",
-        fullname: "Jose da Silva",
-        email: "sandbox_v2_1401147277@email.com",
-      }
-    })
+    order = api.order.create(data)
+  end
+
+  def create_payment(data)
+    payment = api.order.create(data)
   end
 end
