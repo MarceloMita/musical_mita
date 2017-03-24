@@ -1,0 +1,72 @@
+<div class="container">
+  <div class="col-md-6 col-md-offset-3">
+    <%= form_for(resource, as: resource_name,
+                 url: registration_path(resource_name),
+                 html: { id: "sky-form4", class: "log-reg-block sky-form" }) do |f| %>
+      <%= devise_error_messages! %>
+      <h2>Criar nova conta</h2>
+
+      <div class="login-input reg-input">
+        <div class="row">
+          <div class="col-sm-12">
+            <section>
+              <label class="input">
+                <%= f.text_field :name, autofocus: true, placeholder: 'Nome', class: 'form-control' %>
+              </label>
+            </section>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <section>
+              <label class="input">
+                <%= f.email_field :email, placeholder: 'Email', class: 'form-control' %>
+              </label>
+            </section>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <section>
+              <label class="input">
+                <%= f.text_field :birthdate, placeholder: 'Data de Nascimento', class: 'form-control' %>
+              </label>
+            </section>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <section>
+              <label class="input">
+                <%= f.text_field :cpf, placeholder: 'CPF', class: 'form-control' %>
+              </label>
+            </section>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <section>
+              <label class="input">
+                <%= f.password_field :password, autocomplete: "off", placeholder: 'Senha', class: 'form-control' %>
+              </label>
+            </section>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm-12">
+            <section>
+              <label class="input">
+                <%= f.password_field :password_confirmation, autocomplete: "off", placeholder: 'Confirme a Senha', class: 'form-control' %>
+              </label>
+            </section>
+          </div>
+        </div>
+      </div>
+      <%= f.submit "Criar Conta", class: "btn-u btn-u-sea-shop btn-block margin-bottom-20" %>
+    <% end %>
+
+    <div class="margin-bottom-20"></div>
+    <%= render "clients/shared/links" %>
+  </div>
+</div>

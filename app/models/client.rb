@@ -2,23 +2,25 @@ class Client < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
-  has_many :phones, as: :user
-  has_many :addresses, as: :user
+  has_one :phone, as: :user
+  has_one :address, as: :user
   has_many :carts
 
+  after_create :generate_complements
+
   def current_cart
-    self.carts.where(checked_out: false).includes(cart_items: [:product]).first
+    cart = self.carts.where(checked_out: false).includes(cart_items: [:product]).first
+    if cart.nil?
+      cart = Cart.create(client_id: self.id)
+    end
+    return cart
   end
 
-  def holder_json
-    {
-      fullname: self.name,
-      birthdate: self.birthdate.strftime("%Y-%m-%d"),
-      tax_document: {
-        type: "CPF",
-        number: self.cpf
-      },
-      phone: self.phones.last.phone_to_json
-    }
+  protected
+
+  def generate_complements
+    Address.create(user: self, country: 'Brasil')
+    Phone.create(user: self, country_code: '55')
   end
+
 end

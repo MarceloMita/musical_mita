@@ -28,7 +28,7 @@ class Cart < ApplicationRecord
     self.cart_items.inject(0) { |sum, cart_item| sum + cart_item.quantity }
   end
 
-  def checkout_cart(data)
+  def checkout(data)
     moip_client = MoipClient.new
     order = moip_client.create_order(order_json(data[:payment_data][:installment_count]))
     payment = moip_client.create_payment(order.id, payment_json(data[:payment_data]))
@@ -53,7 +53,19 @@ class Cart < ApplicationRecord
           expiration_year: payment_data[:expiration_year],
           number: payment_data[:number],
           cvc: payment_data[:cvc],
-          holder: self.client.holder_json
+          holder: {
+            fullname: payment_data[:holder][:name],
+            birthdate: payment_data[:holder][:birthdate],
+            tax_document: {
+              type: 'CPF',
+              number: payment_data[:holder][:cpf]
+            },
+            phone: {
+              contry_code: payment_data[:holder][:phone_country_code],
+              area_code: payment_data[:holder][:phone_area_code],
+              number: payment_data[:holder][:phone_number]
+            }
+          }
         }
       }
     }
@@ -67,7 +79,7 @@ class Cart < ApplicationRecord
           addition: calculate_additions(installments),
           discount: calculate_discounts
         }
-      }
+      },
       items: items_to_json,
       customer: client_data_to_json
     }
@@ -90,7 +102,7 @@ class Cart < ApplicationRecord
 
   def client_data_to_json
     {
-      own_id:    "cliente_musical_mita_#{self.client.id]}",
+      own_id:    "cliente_musical_mita_#{self.client.id}",
       full_name: self.client.name,
       email:     self.client.email,
       birthdate: self.client.birthdate,
@@ -98,8 +110,8 @@ class Cart < ApplicationRecord
         number: self.client.cpf,
         type:   'CPF'
       },
-      phone:            self.client.phones.last.phone_to_json,
-      shipping_address: self.client.addresses.last.address_to_json
+      phone:            self.client.phone.last.phone_to_json,
+      shipping_address: self.client.address.last.address_to_json
     }
   end
 end

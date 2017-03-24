@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
-  devise_for :clients
+  devise_for :clients, controllers: {
+    sessions: 'clients/sessions',
+    registrations: 'clients/registrations' 
+  }
   root 'products#marketplace'
 
   get 'carts/show' => 'carts#show'
