@@ -23,3 +23,9 @@ puts '##          Creating Clients           ##'
 puts '#########################################'
 
 load Rails.root.join('db/examples/clients.rb')
+
+puts '#########################################'
+puts '##          Configuring webhooks       ##'
+puts '#########################################'
+
+MoipWebhook.generate_webhook
