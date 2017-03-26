@@ -1,8 +1,18 @@
-<li>
-  <!-- <img src="assets/img/thumb/<%#= product %>.jpg" alt=""> -->
-  <button type="button" class="close">×</button>
-  <div class="overflow-h">
-    <span><%= cart_item.product.title %></span>
-    <small><span id="quantity-product-<%= cart_item.id %>"><%= cart_item.quantity %></span> x R$ <%= cart_item.product.value %></small>
+<li class='cart-item-<%= cart_item.id %>'>
+  <div class="col-xs-4 thumb-image-wrapper">
+    <%= image_tag cart_item.product.image_name,
+    alt: '', id: 'thumb-image' %>
+  </div>
+  <div class="col-xs-8">
+    <%= link_to remove_from_cart_path(id: cart_item.id, format: 'js'),
+                                 class: 'close', remote: true do %>
+          <span class="fa fa-times"></span>
+          <span class="sr-only">Deletar</span>
+    <% end %>
+    <div class="overflow-h">
+      <span><%= cart_item.product.title %></span>
+      <small>
+        <span id="quantity-product-<%= cart_item.id %>"><%= cart_item.quantity %></span> x <%= number_to_currency(cart_item.product.value, unit: 'R$', separator: ',', delimiter: '.') %></small>
+      </div>
   </div>
 </li>

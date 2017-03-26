@@ -6,7 +6,7 @@ class Address < ApplicationRecord
       street:        self.street,
       street_number: self.street_number,
       complement:    self.complement,
-      distric:       self.distric,
+      district:      self.district,
       city:          self.city,
       state:         self.state,
       country:       self.country,

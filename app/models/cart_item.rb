@@ -3,6 +3,6 @@ class CartItem < ApplicationRecord
   belongs_to :product
 
   def subtotal
-    cart_item.product.value * cart_item.quantity
+    self.product.value * self.quantity
   end
 end

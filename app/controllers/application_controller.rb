@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
     else
       @cart = Cart.includes(cart_items: [:product]).
                 find_or_create_by(session_id: session[:session_id],
-                                  checked_out: false)
+                                  status: 0)
     end
   end
 end

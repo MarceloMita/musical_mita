@@ -11,7 +11,7 @@ class MoipClient
     order = api.order.create(data)
   end
 
-  def create_payment(data)
-    payment = api.order.create(data)
+  def create_payment(order_id, data)
+    payment = api.payment.create(order_id, data)
   end
 end

@@ -21,9 +21,37 @@
 }
 
 .header-v5 .mCustomScrollbar {
-  min-height: 40px;
+  max-height: 250px;
 }
 
 .reg-input .input {
   width: 100%;
+}
+
+.cart-items {
+  position: relative;
+  display: flex;
+  .item {
+    flex: 1;
+    margin-bottom: 20px;
+  }
+}
+
+.product-description {
+  position: absolute;
+  bottom: 0;
+}
+
+.thumb-image-wrapper {
+  width: 50px;
+  height: 50px;
+  position: relative;
+  overflow: hidden;
+  #thumb-image {
+    width: 100%;
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+  }
 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170323113620) do
+ActiveRecord::Schema.define(version: 20170326131154) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,13 +44,14 @@ ActiveRecord::Schema.define(version: 20170323113620) do
   create_table "carts", force: :cascade do |t|
     t.integer  "client_id"
     t.string   "session_id"
-    t.boolean  "checked_out",     default: false
+    t.integer  "status",          default: 0
     t.string   "moip_order_id"
     t.string   "moip_payment_id"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.string   "cupon"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
     t.index ["client_id"], name: "index_carts_on_client_id", using: :btree
-    t.index ["session_id", "checked_out"], name: "index_carts_on_session_id_and_checked_out", using: :btree
+    t.index ["session_id", "status"], name: "index_carts_on_session_id_and_status", using: :btree
     t.index ["session_id"], name: "index_carts_on_session_id", using: :btree
   end
 
@@ -72,6 +73,13 @@ ActiveRecord::Schema.define(version: 20170323113620) do
     t.datetime "updated_at",                          null: false
     t.index ["email"], name: "index_clients_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_clients_on_reset_password_token", unique: true, using: :btree
+  end
+
+  create_table "cupons", force: :cascade do |t|
+    t.string   "code"
+    t.datetime "expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "phones", force: :cascade do |t|

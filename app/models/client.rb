@@ -9,7 +9,7 @@ class Client < ApplicationRecord
   after_create :generate_complements
 
   def current_cart
-    cart = self.carts.where(checked_out: false).includes(cart_items: [:product]).first
+    cart = self.carts.where(status: 0).includes(cart_items: [:product]).first
     if cart.nil?
       cart = Cart.create(client_id: self.id)
     end

@@ -1,273 +1,330 @@
 <!--=== Content Medium Part ===-->
 <div class="content-md margin-bottom-30">
-  <div class="container">
-    <%= form_tag carts_checkout_path do %>
-      <div>
-        <div class="header-tags">
-          <div class="overflow-h">
-            <h2>Carrinho de Compras</h2>
-            <p>Edite sua compra</p>
-            <i class="rounded-x fa fa-check"></i>
-          </div>
-        </div>
-        <section>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Produto</th>
-                  <th>Preço Un.</th>
-                  <th>Quantidade</th>
-                  <th>Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <% @cart.cart_items.each do |cart_item| %>
-                  <tr>
-                    <td class="product-in-table">
-                      <div class="product-it-in">
-                        <h3><%= cart_item.product.title %></h3>
-                        <span><%= cart_item.product.description %></span>
-                      </div>
-                    </td>
-                    <td>R$ <%= cart_item.product.value %></td>
-                    <td>
-                      <button type='button' class="quantity-button" name='subtract' onclick='javascript: subtractQty1();' value='-'>-</button>
-                      <input type='text' class="quantity-field" name='qty1' value="5" id='qty1'/>
-                      <button type='button' class="quantity-button" name='add' onclick='javascript: document.getElementById("qty1").value++;' value='+'>+</button>
-                    </td>
-                    <td class="shop-red">
-                      <%= cart_item.subtotal %>
-                    </td>
-                    <td>
-                      <button type="button" class="close">
-                        <span class="fa fa-times"></span><span class="sr-only">Deletar</span>
-                      </button>
-                    </td>
-                  </tr>
-                <% end %>
-              </tbody>
-            </table>
-          </div>
-        </section>
+    <div class="container">
+        <%= form_tag carts_checkout_path, class: "shopping-cart" do %>
+        <div>
+            <div class="header-tags">
+                <div class="overflow-h">
+                    <h2>Carrinho de Compras</h2>
+                    <p>Edite sua compra</p>
+                    <i class="rounded-x fa fa-check"></i>
+                </div>
+            </div>
+            <section>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Preço Un.</th>
+                                <th>Quantidade</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% @cart.cart_items.each do |cart_item| %>
+                            <tr class="cart-item-<%= cart_item.id %>">
+                                <td class="product-in-table">
+                                    <div class="product-it-in">
+                                        <h3><%= cart_item.product.title %></h3>
+                                        <span><%= cart_item.product.description %></span>
+                                    </div>
+                                </td>
+                                <td>
+                                  <%= number_to_currency(cart_item.product.value, unit: "R$", separator: ",", delimiter: ".") %>
+                                <td>
+                                    <button type='button' class="quantity-button" name='subtract' onclick='javascript: subtractQty1();' value='-'>-</button>
+                                    <input type='text' class="quantity-field" name='qty1' value="<%= cart_item.quantity %>" id='qty1'/>
+                                    <button type='button' class="quantity-button" name='add' onclick='javascript: document.getElementById("qty1").value++;' value='+'>+</button>
+                                </td>
+                                <td class="shop-red">
+                                  <%= number_to_currency(cart_item.subtotal, unit: "R$", separator: ",", delimiter: ".") %>
+                                </td>
+                                <td>
+                                  <%= link_to remove_from_cart_path(id: cart_item.id, format: 'js'), class: 'close', remote: true do %>
+                                        <span class="fa fa-times"></span>
+                                        <span class="sr-only">Deletar</span>
+                                  <% end %>
+                                </td>
+                            </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
 
-        <div class="header-tags">
-          <div class="overflow-h">
-            <h2>Dados do Cliente</h2>
-            <p>Dados pessoais e de entrega</p>
-            <i class="rounded-x fa fa-home"></i>
-          </div>
-        </div>
-        <section class="billing-info">
-          <div class="row">
-            <div class="col-md-12 md-margin-bottom-40">
-              <h2 class="title-type">Dados Pessoais</h2>
-              <div class="billing-info-inputs checkbox-list">
-                <% fields_for :client_data do %>
-                  <div class="row">
-                    <div class="col-sm-6 form-group">
-                      <%= label_tag :name, 'Nome' %>
-                      <%= text_field_tag :name, current_client.name, class: 'form-control', placeholder: 'Nome Completo' %>
-                    </div>
-                    <div class="col-sm-6 form-group">
-                      <%= label_tag :birthdate, 'Nascimento' %>
-                      <%= text_field_tag :birthdate,
-                                         current_client.birthdate.try(:strftime, "%d/%m/%Y"),
-                                         class: 'form-control',
-                                         placeholder: 'Nome Completo' %>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-12 form-group">
-                      <%= label_tag :cpf, 'CPF' %>
-                      <%= text_field_tag :cpf,
-                                         current_client.cpf,
-                                         class: 'form-control',
-                                         placeholder: 'CPF' %>
-                    </div>
-                  </div>
-                  <% fields_for :phone do %>
-                    <div class="row">
-                      <div class="col-sm-2 form-group">
-                        <%= label_tag :country_code, 'Cod. País' %>
-                        <%= text_field_tag :country_code,
-                                           current_client.phone.country_code,
-                                           class: 'form-control' %>
-                      </div>
-                      <div class="col-sm-2 form-group">
-                        <%= label_tag :area_code, 'DDD' %>
-                        <%= text_field_tag :area_code,
-                                           current_client.phone.area_code,
+            <div class="header-tags">
+                <div class="overflow-h">
+                    <h2>Dados do Cliente</h2>
+                    <p>Dados pessoais e de entrega</p>
+                    <i class="rounded-x fa fa-home"></i>
+                </div>
+            </div>
+            <section class="billing-info">
+                <div class="row">
+                    <div class="col-md-6 md-margin-bottom-40">
+                        <h2 class="title-type">Dados Pessoais</h2>
+                        <div class="billing-info-inputs checkbox-list">
+                            <div class="row">
+                                <div class="col-sm-6 form-group">
+                                    <%= label_tag :name, 'Nome' %>
+                                    <%= text_field_tag 'client_data[name]',
+                                                       current_client.name,
+                                                       class: 'form-control',
+                                                       placeholder: 'Nome Completo' %>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <%= label_tag :birthdate, 'Nascimento' %>
+                                    <%= text_field_tag 'client_data[birthdate]', current_client.birthdate.try(:strftime, "%d/%m/%Y"), class: 'form-control', placeholder: 'Nome Completo' %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 form-group">
+                                    <%= label_tag :cpf, 'CPF' %>
+                                    <%= text_field_tag 'client_data[cpf]',
+                                           current_client.cpf,
                                            class: 'form-control',
-                                           placeholder: '99' %>
-                      </div>
-                      <div class="col-sm-8 form-group">
-                        <%= label_tag :number, 'Número' %>
-                        <%= text_field_tag :number,
-                                           current_client.phone.number,
-                                           class: 'form-control',
-                                           placeholder: '99999-9999' %>
-                      </div>
+                                           placeholder: 'CPF' %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 form-group">
+                                    <%= label_tag :country_code, 'Cod. País' %>
+                                    <%= text_field_tag 'phone[country_code]',
+                                             current_client.phone.country_code,
+                                             class: 'form-control' %>
+                                </div>
+                                <div class="col-sm-3 form-group">
+                                    <%= label_tag :area_code, 'DDD' %>
+                                    <%= text_field_tag 'phone[area_code]',
+                                             current_client.phone.area_code,
+                                             class: 'form-control',
+                                             placeholder: '99' %>
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <%= label_tag :number, 'Número' %>
+                                    <%= text_field_tag 'phone[number]',
+                                             current_client.phone.number,
+                                             class: 'form-control',
+                                             placeholder: '99999-9999' %>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  <% end %>
-                  <% fields_for :address do %>
-                    <div class="row">
-                      <div class="col-sm-12 form-group">
-                        <%= label_tag :street, 'Endereço' %>
-                        <%= text_field_tag :street, current_client.address.street, class: 'form-control' %>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-3 form-group">
-                        <%= label_tag :street_number, 'Número' %>
-                        <%= text_field_tag :street_number,
+                    <div class="col-md-6">
+                        <h2 class="title-type">Dados para Entrega</h2>
+                        <div class="billing-info-inputs checkbox-list">
+                            <div class="row">
+                                <div class="col-sm-12 form-group">
+                                    <%= label_tag :street, 'Endereço' %>
+                                    <%= text_field_tag 'address[street]', current_client.address.street, class: 'form-control' %>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3 form-group">
+                                    <%= label_tag :street_number, 'Número' %>
+                                    <%= text_field_tag 'address[street_number]',
                                            current_client.address.street_number,
                                            class: 'form-control' %>
-                      </div>
-                      <div class="col-sm-3 form-group">
-                        <%= label_tag :complement, 'Complemento' %>
-                        <%= text_field_tag :complement,
+                                </div>
+                                <div class="col-sm-3 form-group">
+                                    <%= label_tag :complement, 'Complemento' %>
+                                    <%= text_field_tag 'address[complement]',
                                            current_client.address.complement,
                                            class: 'form-control' %>
-                      </div>
-                      <div class="col-sm-6 form-group">
-                        <%= label_tag :zip_code, 'CEP' %>
-                        <%= text_field_tag :zip_code,
+                                </div>
+                                <div class="col-sm-6 form-group">
+                                    <%= label_tag :zip_code, 'CEP' %>
+                                    <%= text_field_tag 'address[zip_code]',
                                            current_client.address.zip_code,
                                            class: 'form-control' %>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-sm-6 form-group">
-                        <%= label_tag :district, 'Bairro' %>
-                        <%= text_field_tag :district,
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-5 form-group">
+                                    <%= label_tag :district, 'Bairro' %>
+                                    <%= text_field_tag 'address[district]',
                                            current_client.address.district,
                                            class: 'form-control' %>
-                      </div>
-                      <div class="col-sm-6 form-group">
-                        <%= label_tag :city, 'Cidade' %>
-                        <%= text_field_tag :city,
+                                </div>
+                                <div class="col-sm-5 form-group">
+                                    <%= label_tag :city, 'Cidade' %>
+                                    <%= text_field_tag 'address[city]',
                                            current_client.address.city,
                                            class: 'form-control' %>
-                      </div>
+                                </div>
+                                <div class="col-sm-2 form-group">
+                                    <%= label_tag :state, 'Estado' %>
+                                    <%= text_field_tag 'address[state]',
+                                           current_client.address.state,
+                                           class: 'form-control' %>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  <% end %>
-                <% end %>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <div class="header-tags">
-          <div class="overflow-h">
-            <h2>Pagamento</h2>
-            <p>Pagamento usando a Moip</p>
-            <i class="rounded-x fa fa-credit-card"></i>
-          </div>
-        </div>
-
-        <section>
-          <div class="row">
-            <% fields_for :payment_data do %>
-              <div class="col-md-12 md-margin-bottom-50">
-                <h2 class="title-type">Faça o pagamento usando a Moip</h2>
-                <div class="panel-group">
-                  <div class="panel panel-default">
-                    <div class="panel-heading">
-                      <h4 class="panel-title">
-                        <i class="fa fa-credit-card"></i>Cartão de Crédito
-                      </h4>
-                    </div>
-                    <div class="panel-body cus-form-horizontal">
-                        <div class="form-group">
-                          <label class="col-sm-4 no-col-space control-label">
-                            Nome no Cartão
-                          </label>
-                          <div class="col-sm-8">
-                            <% text_field_tag :cardholder, nil,
-                                              class: 'form-control required',
-                                              placeholder: 'José da Silva' %>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="col-sm-4 no-col-space control-label">
-                            Número do Cartão
-                          </label>
-                          <div class="col-sm-8">
-                            <% text_field_tag :cardnumber, nil,
-                                              class: 'form-control required',
-                                              placeholder: 'XXXX-XXXX-XXXX-XXXX' %>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="col-sm-4 no-col-space control-label">
-                            Número de parcelas:
-                          </label>
-                          <div class="col-sm-8">
-                            <% select_tag [*(1..12)] %>
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="col-sm-4">Data de Vencimento</label>
-                          <div class="col-sm-8 input-small-field">
-                            <input type="text" name="mm" placeholder="MM" class="form-control required sm-margin-bottom-20">
-                            <span class="slash">/</span>
-                            <input type="text" name="yy" placeholder="YY" class="form-control required">
-                          </div>
-                        </div>
-                        <div class="form-group">
-                          <label class="col-sm-4 no-col-space control-label">CVC</label>
-                          <div class="col-sm-8 input-small-field">
-                            <input type="text" name="number" placeholder="" class="form-control required">
-                          </div>
-                        </div>
-                      </div>
-                  </div>
                 </div>
-              </div>
-            </div>
-          <% end %>
-        </section>
+            </section>
 
-        <div class="coupon-code">
-          <div class="row">
-            <div class="col-sm-4 sm-margin-bottom-30">
-              <h3>Código de Desconto</h3>
-              <p>Entre com o cupom de desconto</p>
-              <input class="form-control margin-bottom-10" name="code" type="text">
-              <button type="button" class="btn-u btn-u-sea-shop">Aplicar Cuponm</button>
+            <div class="header-tags">
+                <div class="overflow-h">
+                    <h2>Pagamento</h2>
+                    <p>Pagamento usando a Moip</p>
+                    <i class="rounded-x fa fa-credit-card"></i>
+                </div>
             </div>
-            <div class="col-sm-3 col-sm-offset-5">
-              <ul class="list-inline total-result">
-                <li>
-                  <h4>Subtotal:</h4>
-                  <div class="total-result-in">
-                    <span>
-                      <%= @cart.calculate_subtotal_value %>
-                    </span>
-                  </div>
-                </li>
-                <li>
-                  <h4>Desconto:</h4>
-                  <div class="total-result-in">
-                    <span class="text-right">
-                      <%= @cart.calculate_discount %>
-                    </span>
-                  </div>
-                </li>
-                <li class="divider"></li>
-                <li class="total-price">
-                  <h4>Total:</h4>
-                  <div class="total-result-in">
-                    <span><%= @cart.calculate_total_value %></span>
-                  </div>
-                </li>
-              </ul>
+
+            <section>
+                <div class="row">
+                    <div class="col-md-12 md-margin-bottom-50">
+                        <h2 class="title-type">Faça o pagamento usando a Moip</h2>
+                        <div class="panel-group">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">
+                                        <i class="fa fa-credit-card"></i>Cartão de Crédito
+                                    </h4>
+                                </div>
+                                <div class="panel-body cus-form-horizontal">
+                                    <div class="form-group">
+                                      <label class="col-md-2 no-col-space control-label">
+                                          Nome no Cartão
+                                      </label>
+                                      <div class="col-sm-3">
+                                          <%= text_field_tag 'card[holder][name]', nil,
+                                          class: 'form-control',
+                                          placeholder: 'José da Silva' %>
+                                      </div>
+                                      <label class="col-md-1 no-col-space control-label">
+                                          CPF
+                                      </label>
+                                      <div class="col-sm-2">
+                                          <%= text_field_tag 'card[holder][cpf]', nil,
+                                          class: 'form-control',
+                                          placeholder: '999.999.999-99' %>
+                                      </div>
+                                      <label class="col-md-2 no-col-space control-label">
+                                          Data de Nascimento
+                                      </label>
+                                      <div class="col-sm-2">
+                                          <%= text_field_tag 'card[holder][birthdate]', nil,
+                                          class: 'form-control',
+                                          placeholder: 'DD/MM/YYYY' %>
+                                      </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 no-col-space control-label">
+                                            Telefone:
+                                        </label>
+                                        <label class="col-md-2 no-col-space control-label">
+                                            Cod. País
+                                        </label>
+                                        <div class="col-md-1">
+                                            <%= text_field_tag 'card[holder][country_code]', nil,
+                                            class: 'form-control',
+                                            placeholder: '55' %>
+                                        </div>
+                                        <label class="col-md-1 no-col-space control-label">
+                                            DDD
+                                        </label>
+                                        <div class="col-md-1">
+                                            <%= text_field_tag 'card[holder][area_code]', nil,
+                                            class: 'form-control',
+                                            placeholder: '99' %>
+                                        </div>
+                                        <label class="col-md-2 no-col-space control-label">
+                                            Número
+                                        </label>
+                                        <div class="col-md-3">
+                                            <%= text_field_tag 'card[holder][phone_number]', nil,
+                                            class: 'form-control',
+                                            placeholder: '99999-9999' %>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-2 no-col-space control-label">
+                                            Número do Cartão
+                                        </label>
+                                        <div class="col-sm-3">
+                                            <%= text_field_tag 'card[number]', nil,
+                                            class: 'form-control',
+                                            placeholder: 'XXXX-XXXX-XXXX-XXXX' %>
+                                        </div>
+                                        <label class="col-md-2">Data de Vencimento</label>
+                                        <div class="col-md-3 input-small-field">
+                                            <%= text_field_tag 'card[expiration_month]', nil,
+                                            class: 'form-control sm-margin-bottom-20',
+                                            placeholder: 'MM' %>
+                                            <span class="slash">/</span>
+                                            <%= text_field_tag 'card[expiration_year]', nil,
+                                            class: 'form-control',
+                                            placeholder: 'YY' %>
+                                        </div>
+                                        <label class="col-md-1 no-col-space control-label">CVC</label>
+                                        <div class="col-md-1">
+                                            <%= text_field_tag 'card[cvc]', nil,
+                                            class: 'form-control' %>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                      <label class="col-md-4 no-col-space control-label">
+                                          Número de parcelas:
+                                      </label>
+                                      <div class="col-md-8">
+                                          <%= select_tag 'card[installment_count]',  options_for_select([*(1..12)]), include_blank: true, class: 'form-control' %>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="coupon-code">
+                <div class="row">
+                    <div class="col-sm-4 sm-margin-bottom-30">
+                        <h3>Código de Desconto</h3>
+                        <p>Entre com o cupom de desconto</p>
+                        <%= text_field_tag 'cupon', nil,
+                                           class: 'form-control margin-bottom-10',
+                                           id: 'cupon-field',
+                                           value: @cart.cupon %>
+                        <button type="button" class="btn-u btn-u-sea-shop" onclick='applyCupon()' remote='true'>
+                          Aplicar Cupom
+                        </button>
+                    </div>
+                    <div class="col-sm-3 col-sm-offset-5">
+                        <ul class="list-inline total-result">
+                            <li>
+                                <h4>Subtotal:</h4>
+                                <div class="total-result-in">
+                                    <span>
+                                        <%= number_to_currency(@cart.calculate_subtotal_value, unit: 'R$', delimiter: '.', separator: ',') %>
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <h4>Desconto:</h4>
+                                <div class="total-result-in">
+                                    <span class="text-right">
+                                        <%= number_to_currency(@cart.calculate_discount, unit: 'R$', delimiter: '.', separator: ',') %>
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="divider"></li>
+                            <li class="total-price">
+                                <h4>Total:</h4>
+                                <div class="total-result-in">
+                                    <span><%= number_to_currency(@cart.calculate_total_value, unit: 'R$', delimiter: '.', separator: ',') %></span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-    <% end %>
-  </div><!--/end container-->
+        <% end %>
+    </div>
+    <!--/end container-->
 </div>
 <!--=== End Content Medium Part ===-->

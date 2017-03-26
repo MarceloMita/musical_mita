@@ -1,21 +1,24 @@
-<div class="item col-md-4">
+<div class="item col-md-3">
   <div class="product-img">
-    <%= link_to product_path(slug: 'test') do %>
-      <%= image_tag 'logo.png', alt: '', class: 'full-width img-responsive' %>
+    <%= image_tag product.image_name, alt: '', class: 'full-width img-responsive' %>
+    <%= link_to add_to_cart_path(slug: product.cached_slug, format: 'js'),
+                class: 'add-to-cart',
+                remote: true do %>
+      <i class="fa fa-shopping-cart"></i>Adicionar ao Carrinho
     <% end %>
-    <a class="add-to-cart" href="#">
-      <i class="fa fa-shopping-cart"></i>Add to cart
-    </a>
   </div>
   <div class="product-description product-description-brd">
     <div class="overflow-h margin-bottom-5">
-      <div class="pull-left">
-        <h4 class="title-price"><a href="shop-ui-inner.html">Double-breasted</a></h4>
-        <span class="gender text-uppercase">Men</span>
-        <span class="gender">Suits - Blazers</span>
+      <div class="col-sm-8">
+        <h4 class="title-price">
+          <%= product.title %>
+        </h4>
+        <span class="gender"><%= product.description %></span>
       </div>
-      <div class="product-price">
-        <span class="title-price">$95.00</span>
+      <div class="col-sm-4 product-price">
+        <span class="title-price">
+          R$ <%= product.value.to_s.gsub('.', ',') %>
+        </span>
       </div>
     </div>
   </div>

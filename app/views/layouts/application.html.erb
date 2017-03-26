@@ -15,6 +15,15 @@
   <body class="header-fixed">
     <div class="wrapper">
       <%= render partial: 'shared/header' %>
+      <div class="container text-center">
+        <% %w(success danger info warning).each do |alert_type| %>
+          <% if flash[alert_type.to_sym] %>
+            <div class="alert alert-<%= alert_type %>" role="alert">
+              <%= flash[alert_type.to_sym] %>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
       <%= yield %>
       <%= render partial: 'shared/footer' %>
     </div>

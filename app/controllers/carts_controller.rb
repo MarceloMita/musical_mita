@@ -1,10 +1,25 @@
 class CartsController < ApplicationController
   before_action :authenticate_client!, only: [:checkout, :show]
+  protect_from_forgery except: [:add_product, :remove_product]
   def show
   end
 
   def checkout
-    @cart.checkout(params)
+    current_client.update(checkout_params[:client_data])
+    current_client.address.update(checkout_params[:address])
+    current_client.phone.update(checkout_params[:phone])
+    if @cart.cart_items.empty?
+      flash[:danger] = 'O carrinho está vazio, adicione produtos ao carrinho para realizar a compra.'
+      redirect_to :root
+    else
+      if @cart.checkout(checkout_params[:card])
+        flash[:success] = 'Pagamento em análise. Após liberado o pagamento, o pedido será enviado para sua residência.'
+        redirect_to :root
+      else
+        flash[:danger] = 'Não foi possível registrar seu pagamento. Verifique os dados e tente novamente.'
+        redirect_to :back
+      end
+    end
   end
 
   def add_product
@@ -12,8 +27,24 @@ class CartsController < ApplicationController
     @cart_item = CartItem.find_or_create_by(product_id: @product.id,
                                             cart_id: @cart.id)
     @cart_item.increment!(:quantity)
+    get_cart
     respond_to do |format|
       format.js
     end
+  end
+
+  def remove_product
+    CartItem.find(params[:id]).destroy
+    @cart_item_id = params[:id]
+    get_cart
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  protected
+
+  def checkout_params
+    params.permit!
   end
 end
