@@ -3,7 +3,7 @@ class Cart < ApplicationRecord
   has_many :cart_items, dependent: :destroy
   has_many :products, through: :cart_items
 
-  enum status: %w(draft payment paid)
+  enum status: %w(draft payment paid cancelled)
 
   def calculate_subtotal_value
     value = self.cart_items.inject(0) do |sum, cart_item|
@@ -13,43 +13,46 @@ class Cart < ApplicationRecord
 
   def calculate_discount
     # 5% discount
-    if Cupon.find_by(code: self.cupon)
+    if Cupon.find_by(code: self.cupon).try(:valid_cupon?)
       calculate_subtotal_value * 0.05
     else
       0.0
     end
   end
 
-  def calculate_additions(installments)
+  def calculate_additions
     # Addition of 2,5%
-    (installments.to_i > 1 ? calculate_total_value * 0.025 : 0)
+    if self.installment_count.nil?
+      0.00
+    else
+      (self.installment_count.to_i > 1 ? calculate_total_value * 0.025 : 0)
+    end
   end
 
   def calculate_total_value
     calculate_subtotal_value - calculate_discount
   end
 
-  def calculate_total_price(installments)
-    calculate_total_value + calculate_additions(installments)
+  def calculate_total_price
+    calculate_total_value + calculate_additions
   end
 
   def quantity
     self.cart_items.inject(0) { |sum, cart_item| sum + cart_item.quantity }
   end
 
-  def checkout(data)
+  def checkout
     begin
       moip_client = MoipClient.new
-      order = moip_client.create_order(order_json(data[:installment_count]))
-      payment = moip_client.create_payment(order.id, data)
-
+      order = moip_client.create_order(order_json)
+      payment = moip_client.create_payment(order.id, payment_json)
       if self.update(moip_order_id: order.id, moip_payment_id: payment.id, status: 1)
         return true
       else
         self.errors.add(:checked_out_error, message: "Couldn't checkout cart")
         return false
       end
-    rescue
+    rescue => e
       self.errors.add(:checked_out_error, message: "Couldn't checkout cart")
       return false
     end
@@ -57,41 +60,23 @@ class Cart < ApplicationRecord
 
   protected
 
-  def payment_json(payment_data)
+  def payment_json
     {
-      installment_count: payment_data[:installment_count],
-      fundingInstrument: {
+      installment_count: self.installment_count,
+      funding_instrument: {
         method: 'CREDIT_CARD',
-        credit_card: {
-          expiration_month: payment_data[:expiration_month],
-          expiration_year: payment_data[:expiration_year],
-          number: payment_data[:number],
-          cvc: payment_data[:cvc],
-          holder: {
-            fullname: payment_data[:holder][:name],
-            birthdate: payment_data[:holder][:birthdate],
-            tax_document: {
-              type: 'CPF',
-              number: payment_data[:holder][:cpf]
-            },
-            phone: {
-              contry_code: payment_data[:holder][:country_code],
-              area_code: payment_data[:holder][:area_code],
-              number: payment_data[:holder][:phone_number]
-            }
-          }
-        }
+        credit_card: self.client.credit_card.cc_to_json
       }
     }
   end
 
-  def order_json(installments)
+  def order_json
     {
       own_id: generate_order_id,
       amount: {
         currency: 'BRL',
         subtotals: {
-          addition: (calculate_additions(installments) * 100).to_i,
+          addition: (calculate_additions * 100).to_i,
           discount: (calculate_discount * 100).to_i
         }
       },

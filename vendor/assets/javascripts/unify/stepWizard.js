@@ -16,6 +16,10 @@ var StepWizard = function () {
                     headerTag: ".header-tags",
                     bodyTag: "section",
                     transitionEffect: "fade",
+                    labels: {
+                    finish: "Finalizar Compra",
+                    next: "Próximo",
+                    previous: "Anterior" },
                     onStepChanging: function (event, currentIndex, newIndex) {
                         // Allways allow previous action even if the current form is not valid!
                         if (currentIndex > newIndex)

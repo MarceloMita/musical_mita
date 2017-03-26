@@ -4,6 +4,7 @@ class Client < ApplicationRecord
 
   has_one :phone, as: :user
   has_one :address, as: :user
+  has_one :credit_card
   has_many :carts
 
   after_create :generate_complements
@@ -19,8 +20,10 @@ class Client < ApplicationRecord
   protected
 
   def generate_complements
-    Address.create(user: self, country: 'Brasil')
+    Address.create(user: self, country: 'BRA')
     Phone.create(user: self, country_code: '55')
+    cc = CreditCard.create(client_id: self.id)
+    Phone.create(user: cc, country_code: '55')
   end
 
 end

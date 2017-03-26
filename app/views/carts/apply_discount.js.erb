@@ -1,0 +1,2 @@
+$('#discount-value').html(`<%= number_to_currency(@cart.calculate_discount, unit: 'R$', separator: ',', delimiter: '.') %>`);
+$('#total-value').html(`<%= number_to_currency(@cart.calculate_total_price, unit: 'R$', separator: ',', delimiter: '.') %>`);

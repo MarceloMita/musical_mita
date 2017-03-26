@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  expiration_month: MyString
+  expiration_year: MyString
+  number: MyString
+  cvc: MyString
+  holder_name: MyString
+  holder_birthdate: 2017-03-26
+  holder_cpf: MyString
+
+two:
+  expiration_month: MyString
+  expiration_year: MyString
+  number: MyString
+  cvc: MyString
+  holder_name: MyString
+  holder_birthdate: 2017-03-26
+  holder_cpf: MyString

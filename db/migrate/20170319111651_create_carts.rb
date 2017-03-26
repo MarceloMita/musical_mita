@@ -7,6 +7,7 @@ class CreateCarts < ActiveRecord::Migration[5.0]
       t.string :moip_order_id
       t.string :moip_payment_id
       t.string :cupon
+      t.integer :installment_count
       t.timestamps
     end
 

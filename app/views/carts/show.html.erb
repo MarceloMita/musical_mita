@@ -190,15 +190,16 @@
                                           Nome no Cartão
                                       </label>
                                       <div class="col-sm-3">
-                                          <%= text_field_tag 'card[holder][name]', nil,
-                                          class: 'form-control',
-                                          placeholder: 'José da Silva' %>
+                                          <%= text_field_tag 'card[holder_name]',
+                                                              current_client.credit_card.holder_name,
+                                                              class: 'form-control',
+                                                              placeholder: 'José da Silva' %>
                                       </div>
                                       <label class="col-md-1 no-col-space control-label">
                                           CPF
                                       </label>
                                       <div class="col-sm-2">
-                                          <%= text_field_tag 'card[holder][cpf]', nil,
+                                          <%= text_field_tag 'card[holder_cpf]', current_client.credit_card.holder_cpf,
                                           class: 'form-control',
                                           placeholder: '999.999.999-99' %>
                                       </div>
@@ -206,7 +207,7 @@
                                           Data de Nascimento
                                       </label>
                                       <div class="col-sm-2">
-                                          <%= text_field_tag 'card[holder][birthdate]', nil,
+                                          <%= text_field_tag 'card[holder_birthdate]', current_client.credit_card.holder_birthdate,
                                           class: 'form-control',
                                           placeholder: 'DD/MM/YYYY' %>
                                       </div>
@@ -219,7 +220,7 @@
                                             Cod. País
                                         </label>
                                         <div class="col-md-1">
-                                            <%= text_field_tag 'card[holder][country_code]', nil,
+                                            <%= text_field_tag 'holder_phone[country_code]', current_client.credit_card.phone.country_code,
                                             class: 'form-control',
                                             placeholder: '55' %>
                                         </div>
@@ -227,7 +228,7 @@
                                             DDD
                                         </label>
                                         <div class="col-md-1">
-                                            <%= text_field_tag 'card[holder][area_code]', nil,
+                                            <%= text_field_tag 'holder_phone[area_code]', current_client.credit_card.phone.area_code,
                                             class: 'form-control',
                                             placeholder: '99' %>
                                         </div>
@@ -235,7 +236,7 @@
                                             Número
                                         </label>
                                         <div class="col-md-3">
-                                            <%= text_field_tag 'card[holder][phone_number]', nil,
+                                            <%= text_field_tag 'holder_phone[number]', current_client.credit_card.phone.number,
                                             class: 'form-control',
                                             placeholder: '99999-9999' %>
                                         </div>
@@ -245,23 +246,23 @@
                                             Número do Cartão
                                         </label>
                                         <div class="col-sm-3">
-                                            <%= text_field_tag 'card[number]', nil,
+                                            <%= text_field_tag 'card[number]', current_client.credit_card.number,
                                             class: 'form-control',
                                             placeholder: 'XXXX-XXXX-XXXX-XXXX' %>
                                         </div>
                                         <label class="col-md-2">Data de Vencimento</label>
                                         <div class="col-md-3 input-small-field">
-                                            <%= text_field_tag 'card[expiration_month]', nil,
+                                            <%= text_field_tag 'card[expiration_month]', current_client.credit_card.expiration_month,
                                             class: 'form-control sm-margin-bottom-20',
                                             placeholder: 'MM' %>
                                             <span class="slash">/</span>
-                                            <%= text_field_tag 'card[expiration_year]', nil,
+                                            <%= text_field_tag 'card[expiration_year]', current_client.credit_card.expiration_year,
                                             class: 'form-control',
                                             placeholder: 'YY' %>
                                         </div>
                                         <label class="col-md-1 no-col-space control-label">CVC</label>
                                         <div class="col-md-1">
-                                            <%= text_field_tag 'card[cvc]', nil,
+                                            <%= text_field_tag 'card[cvc]', current_client.credit_card.cvc,
                                             class: 'form-control' %>
                                         </div>
                                     </div>
@@ -270,7 +271,7 @@
                                           Número de parcelas:
                                       </label>
                                       <div class="col-md-8">
-                                          <%= select_tag 'card[installment_count]',  options_for_select([*(1..12)]), include_blank: true, class: 'form-control' %>
+                                          <%= select_tag 'installment_count',  options_for_select([*(1..12)]), class: 'form-control' %>
                                       </div>
                                     </div>
                                 </div>
@@ -298,7 +299,7 @@
                             <li>
                                 <h4>Subtotal:</h4>
                                 <div class="total-result-in">
-                                    <span>
+                                    <span class="negative-value">
                                         <%= number_to_currency(@cart.calculate_subtotal_value, unit: 'R$', delimiter: '.', separator: ',') %>
                                     </span>
                                 </div>
@@ -306,16 +307,24 @@
                             <li>
                                 <h4>Desconto:</h4>
                                 <div class="total-result-in">
-                                    <span class="text-right">
+                                    <span class="text-right positive-value" id="discount-value">
                                         <%= number_to_currency(@cart.calculate_discount, unit: 'R$', delimiter: '.', separator: ',') %>
+                                    </span>
+                                </div>
+                            </li>
+                            <li>
+                                <h4>Parcelamento:</h4>
+                                <div class="total-result-in">
+                                    <span class="text-right negative-value">
+                                        <%= number_to_currency(@cart.calculate_additions, unit: 'R$', delimiter: '.', separator: ',') %>
                                     </span>
                                 </div>
                             </li>
                             <li class="divider"></li>
                             <li class="total-price">
                                 <h4>Total:</h4>
-                                <div class="total-result-in">
-                                    <span><%= number_to_currency(@cart.calculate_total_value, unit: 'R$', delimiter: '.', separator: ',') %></span>
+                                <div class="total-result-in negative-value">
+                                    <span id='total-value'><%= number_to_currency(@cart.calculate_total_price, unit: 'R$', delimiter: '.', separator: ',') %></span>
                                 </div>
                             </li>
                         </ul>

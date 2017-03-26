@@ -9,13 +9,13 @@
   </div>
   <div class="product-description product-description-brd">
     <div class="overflow-h margin-bottom-5">
-      <div class="col-sm-8">
+      <div>
         <h4 class="title-price">
           <%= product.title %>
         </h4>
         <span class="gender"><%= product.description %></span>
       </div>
-      <div class="col-sm-4 product-price">
+      <div class="product-price">
         <span class="title-price">
           R$ <%= product.value.to_s.gsub('.', ',') %>
         </span>

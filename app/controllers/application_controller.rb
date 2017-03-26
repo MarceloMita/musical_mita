@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  before_action :get_cart
+  before_action :get_cart, unless: :webhook_controller?
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
@@ -22,5 +22,9 @@ class ApplicationController < ActionController::Base
                 find_or_create_by(session_id: session[:session_id],
                                   status: 0)
     end
+  end
+
+  def webhook_controller?
+    params[:controller] == 'webhooks'
   end
 end

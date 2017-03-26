@@ -36,3 +36,4 @@
 
 
 //= require initializers
+//= require carts
