@@ -1,19 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  expiration_month: MyString
-  expiration_year: MyString
-  number: MyString
-  cvc: MyString
-  holder_name: MyString
-  holder_birthdate: 2017-03-26
-  holder_cpf: MyString
+  client: one
+  expiration_month: '12'
+  expiration_year: '18'
+  number: '4545454545454545'
+  cvc: '241'
+  holder_name: José da Silva
+  holder_birthdate: 1987-03-31
+  holder_cpf: '111.111.111-11'
 
 two:
-  expiration_month: MyString
-  expiration_year: MyString
-  number: MyString
-  cvc: MyString
-  holder_name: MyString
-  holder_birthdate: 2017-03-26
-  holder_cpf: MyString
+  client: two
+  expiration_month: '10'
+  expiration_year: '20'
+  number: '1234123412341234'
+  cvc: '123'
+  holder_name: 'Maria Aparecida'
+  holder_birthdate: 1999-06-29
+  holder_cpf: '123.123.123-12'

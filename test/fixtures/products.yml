@@ -1,13 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  title: MyString
-  cached_slug: MyString
-  description: MyText
-  value: 1.5
+  title: Violão Clássico
+  cached_slug: violao-classico
+  description: Violão clássico
+  image_name: 'violao-classico.jpg'
+  value: 700.00
 
 two:
-  title: MyString
-  cached_slug: MyString
-  description: MyText
-  value: 1.5
+  title: Violino
+  cached_slug: violino
+  description: Violino
+  image_name: 'violino.jpg'
+  value: 800.00

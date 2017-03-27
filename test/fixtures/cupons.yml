@@ -1,9 +1,9 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  code: 
-  expires_at: 2017-03-26 10:11:54
+  code: 'EXPIRED'
+  expires_at: 2012-12-12 12:12:12
 
 two:
-  code: 
-  expires_at: 2017-03-26 10:11:54
+  code: 'NEVEREXPIRES'
+  expires_at: NULL

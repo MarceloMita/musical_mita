@@ -1,7 +1,16 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  quantity: 1
+  cart: one
+  product: one
+  quantity: 2
 
 two:
+  cart: one
+  product: two
   quantity: 1
+
+three:
+  cart: two
+  product: two
+  quantity: 2

@@ -4,8 +4,17 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one: {}
-# column: value
-#
-two: {}
-# column: value
+one:
+  client: one
+  status: "draft"
+  moip_order_id: nil
+  moip_payment_id: nil
+  cupon: 'NEVEREXPIRES'
+  installment_count: 1
+two:
+  client: two
+  status: "draft"
+  moip_order_id: nil
+  moip_payment_id: nil
+  cupon: ''
+  installment_count: 3

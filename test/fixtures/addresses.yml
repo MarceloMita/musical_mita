@@ -1,21 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  street: MyString
-  street_number: MyString
-  complement: MyString
-  district: MyString
-  city: MyString
-  state: MyString
-  country: MyString
-  zip_code: MyString
+  street: Avenida Faria Lima
+  street_number: '2927'
+  complement: '8'
+  district: Itaim
+  city: São Paulo
+  state: SP
+  country: BRA
+  zip_code: '01234000'
 
 two:
-  street: MyString
-  street_number: MyString
-  complement: MyString
-  district: MyString
-  city: MyString
-  state: MyString
-  country: MyString
-  zip_code: MyString
+  street: Avenida Paulista
+  street_number: '804'
+  complement: '1230'
+  district: Jd. Paulista
+  city: São Paulo
+  state: SP
+  country: BRA
+  zip_code: '01234567'
